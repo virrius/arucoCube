@@ -1,7 +1,8 @@
-#include"Calibration.h"
+#include"ICalib.h"
 int main()
 {
-	Calibration C;
+	ICalib C;
+	C.GetCalibrationData_Chess();
 	C.Calibrate();
 	C.ShowUndistorted();
 	return 0;

@@ -10,8 +10,7 @@ Calibration::Calibration(){
 	}
 void Calibration::Calibrate()
 {
-	std::cout << "start calibration \n";
-	GetCalibrationData_Chess();
+	
 	cv::calibrateCamera(objPoints3D, imgPoints2D, boardSize, cameraMatrix, distCoeffs, rvecs, tvecs);
 	std::cout << "Calibrated succesfully  \n";
 }

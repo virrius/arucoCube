@@ -4,10 +4,24 @@
 #include<iostream>
 #include<opencv2\imgproc.hpp>
 #include<opencv2\calib3d.hpp>
-#include"ICalib.h"
 
 
-class Calibration: public ICalib {	
+
+class Calibration {	
+	
+protected:
+	//характеристики объекта
+	const  cv::Size boardSize = cv::Size(4, 4);
+	std::vector<cv::Point3f> points3D;// вершины
+	std::vector<cv::Point2f>corners;
+	std::vector<std::vector<cv::Point3f>> objPoints3D;//физическое расположение
+	std::vector<std::vector<cv::Point2f>> imgPoints2D;//расположение на изображении
+
+  //характеристики камеры
+	cv::Mat cameraMatrix = cv::Mat(3, 3, CV_32FC1);
+	cv::Mat distCoeffs;
+	std::vector<cv::Mat> rvecs;
+	std::vector<cv::Mat> tvecs;
 public:
 	Calibration();
 	void Calibrate();

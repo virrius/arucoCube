@@ -4,7 +4,7 @@
 
 void ICalib::GetCalibrationData_Chess()
 {
-
+	std::cout << "start calibration \n";
 	cv::VideoCapture cam(0);
 	cv::Mat image, grayImg;
 	//создаем систему уравнений
