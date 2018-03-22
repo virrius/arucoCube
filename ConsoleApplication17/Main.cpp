@@ -1,8 +1,8 @@
 #include"ICalib.h"
 int main()
 {
-	int CameraNum = 1;
-	ICalib C;
+	int CameraNum = 0;
+	Artem::ICalib C;
 	if (!C.GetCalibrationData_Chess(CameraNum))
 		return 1;
 	C.Calibrate();

@@ -5,15 +5,15 @@
 #include<opencv2\imgproc.hpp>
 #include<opencv2\calib3d.hpp>
 #include"Calibration.h"
-class ICalib :public  Artem::Calibration{
-protected:
-	
-	
-	
+namespace Artem 
+{
+	class ICalib :public Calibration {
+	protected:
 
-public:
-	
-	bool GetCalibrationData_Chess(int);
-	void ShowUndistorted(int);
-	
-};
+	public:
+
+		bool GetCalibrationData_Chess(int);
+		void ShowUndistorted(int);
+
+	};
+}

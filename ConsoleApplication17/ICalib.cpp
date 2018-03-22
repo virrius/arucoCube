@@ -3,7 +3,7 @@
 
 
 
-bool ICalib::GetCalibrationData_Chess(int CameraNum)
+bool Artem::ICalib::GetCalibrationData_Chess(int CameraNum)
 {
 	int CalibNum=15;
 	int goodCalib = 0;
@@ -29,7 +29,7 @@ bool ICalib::GetCalibrationData_Chess(int CameraNum)
 			cv::cornerSubPix(grayImg, corners, cv::Size(11, 11), cv::Size(-1, -1), cv::TermCriteria(CV_TERMCRIT_EPS | CV_TERMCRIT_ITER, 30, 0.001));
 			cv::drawChessboardCorners(grayImg, boardSize, corners, success);
 		}
-		
+		cv::putText(grayImg, std::to_string(goodCalib) + "/" + std::to_string(CalibNum), cv::Point2i(10, 50), CV_FONT_HERSHEY_DUPLEX, 2, CV_RGB(0, 0, 0), 2);
 		cv::imshow("ColoredCalibrationImage", image);
 		cv::imshow("GrayCalibrationImage", grayImg);
 		
@@ -43,7 +43,7 @@ bool ICalib::GetCalibrationData_Chess(int CameraNum)
 	cam.release();
 	return true;
 }
-void ICalib::ShowUndistorted(int CameraNum)
+void Artem::ICalib::ShowUndistorted(int CameraNum)
 {
 	cv::VideoCapture cam(CameraNum);
 	cv::Mat frame, UndistFrame;
