@@ -5,15 +5,15 @@
 #include<opencv2\imgproc.hpp>
 #include<opencv2\calib3d.hpp>
 #include"Calibration.h"
-class ICalib:public  Calibration{
+class ICalib :public  Artem::Calibration{
 protected:
-	//необходимое число кадров для калибровки
-	const  int CalibNum = 15;
-	//число удачных кадров
-	int goodCalib = 0;
+	
+	
+	
 
 public:
-	void GetCalibrationData_Chess();
-	void ShowUndistorted();
+	
+	bool GetCalibrationData_Chess(int);
+	void ShowUndistorted(int);
 	
 };
