@@ -2,11 +2,16 @@
 
 
 
-void ICalib::GetCalibrationData_Chess()
+
+bool ICalib::GetCalibrationData_Chess(int CameraNum)
 {
-	std::cout << "start calibration \n";
-	cv::VideoCapture cam(0);
+	int CalibNum=15;
+	int goodCalib = 0;
+	
+	cv::VideoCapture cam(CameraNum);
 	cv::Mat image, grayImg;
+	cv::namedWindow("ColoredCalibrationImage", CV_WINDOW_AUTOSIZE);
+	cv::namedWindow("GrayCalibrationImage", CV_WINDOW_AUTOSIZE);
 	//создаем систему уравнений
 	while (goodCalib<CalibNum)
 	{
@@ -17,36 +22,39 @@ void ICalib::GetCalibrationData_Chess()
 		{
 			imgPoints2D.push_back(corners);
 			objPoints3D.push_back(points3D);
-			std::cout << "captured! ";
+			
 			goodCalib++;
-			std::cout << goodCalib << "/" << CalibNum << std::endl;
+			
 
 			cv::cornerSubPix(grayImg, corners, cv::Size(11, 11), cv::Size(-1, -1), cv::TermCriteria(CV_TERMCRIT_EPS | CV_TERMCRIT_ITER, 30, 0.001));
 			cv::drawChessboardCorners(grayImg, boardSize, corners, success);
 		}
-
-		cv::imshow("1", image);
-		cv::imshow("2", grayImg);
-		char key = cv::waitKey(100);
-		if (key == 27)
+		
+		cv::imshow("ColoredCalibrationImage", image);
+		cv::imshow("GrayCalibrationImage", grayImg);
+		
+		if (cv::waitKey(5) == 27)
 		{
-			std::cout << "terminated  \n";
-			return;
+		
+			return false;
 		}
 	}
 	cv::destroyAllWindows();
 	cam.release();
+	return true;
 }
-void ICalib::ShowUndistorted()
+void ICalib::ShowUndistorted(int CameraNum)
 {
-	cv::VideoCapture cam(0);
+	cv::VideoCapture cam(CameraNum);
 	cv::Mat frame, UndistFrame;
+	cv::namedWindow("frame", CV_WINDOW_AUTOSIZE);
+	cv::namedWindow("UndsistFrame", CV_WINDOW_AUTOSIZE);
 	while (true)
 	{
 		cam >> frame;
 		cv::undistort(frame, UndistFrame, cameraMatrix, distCoeffs);
-		cv::imshow("win1", frame);
-		cv::imshow("win2", UndistFrame);
+		cv::imshow("frame", frame);
+		cv::imshow("UndsistFrame", UndistFrame);
 
 		cv::waitKey(1);
 
