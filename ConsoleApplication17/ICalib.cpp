@@ -12,7 +12,7 @@ bool Artem::ICalib::GetCalibrationData_Chess(int CameraNum)
 	cv::Mat image, grayImg;
 	cv::namedWindow("ColoredCalibrationImage", CV_WINDOW_AUTOSIZE);
 	cv::namedWindow("GrayCalibrationImage", CV_WINDOW_AUTOSIZE);
-	//создаем систему уравнений
+
 	while (goodCalib<CalibNum)
 	{
 		cam >> image;
