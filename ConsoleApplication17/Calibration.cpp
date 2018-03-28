@@ -1,20 +1,24 @@
 #include"Calibration.h"
 
-Artem::Calibration::Calibration(){
-		 boardSize =  cv::Size(4, 4);
-		 cv::Mat cameraMatrix = cv::Mat(3, 3, CV_32FC1);
-		for (int i = 0; i < boardSize.width; i++)
-			for (int j = 0; j < boardSize.height; j++)
+Artem::Calibration::Calibration():_boardSize(cv::Size(4,4)), _cameraMatrix(cv::Mat(3,3,CV_32FC1)){
+		
+		for (int i = 0; i < _boardSize.width; i++)
+			for (int j = 0; j < _boardSize.height; j++)
 			{
-				points3D.push_back(cv::Point3f(i,j, 0));
+				_points3D.push_back(cv::Point3f(i,j, 0));
 
 			}
 	}
-void Artem::Calibration::Calibrate()
+void Artem::Calibration::calibrate()
 {
 	
 	std::vector<cv::Mat> rvecs;
 	std::vector<cv::Mat> tvecs;
-	cv::calibrateCamera(objPoints3D, imgPoints2D, boardSize, cameraMatrix, distCoeffs, rvecs, tvecs);
+	cv::calibrateCamera(_objPoints3D, _imgPoints2D, _boardSize, _cameraMatrix, _distCoeffs, rvecs, tvecs);
 	
+}
+
+cv::Mat Artem::Calibration::getCameraMatrix() const
+{
+	return _cameraMatrix;
 }

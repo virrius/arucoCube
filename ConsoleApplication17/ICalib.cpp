@@ -3,12 +3,12 @@
 
 
 
-bool Artem::ICalib::GetCalibrationData_Chess(int CameraNum)
+bool Artem::ICalib::GetCalibrationData_Chess(int cameraNum)
 {
 	int CalibNum=15;
 	int goodCalib = 0;
 	
-	cv::VideoCapture cam(CameraNum);
+	cv::VideoCapture cam(cameraNum);
 	cv::Mat image, grayImg;
 	cv::namedWindow("ColoredCalibrationImage", CV_WINDOW_AUTOSIZE);
 	cv::namedWindow("GrayCalibrationImage", CV_WINDOW_AUTOSIZE);
@@ -17,17 +17,17 @@ bool Artem::ICalib::GetCalibrationData_Chess(int CameraNum)
 	{
 		cam >> image;
 		cv::cvtColor(image, grayImg, CV_BGR2GRAY);
-		bool success = cv::findChessboardCorners(image, boardSize, corners, cv::CALIB_CB_ADAPTIVE_THRESH | CV_CALIB_CB_FILTER_QUADS);
+		bool success = cv::findChessboardCorners(image, _boardSize, _corners, cv::CALIB_CB_ADAPTIVE_THRESH | CV_CALIB_CB_FILTER_QUADS);
 		if (success)
 		{
-			imgPoints2D.push_back(corners);
-			objPoints3D.push_back(points3D);
+			_imgPoints2D.push_back(_corners);
+			_objPoints3D.push_back(_points3D);
 			
 			goodCalib++;
 			
 
-			cv::cornerSubPix(grayImg, corners, cv::Size(11, 11), cv::Size(-1, -1), cv::TermCriteria(CV_TERMCRIT_EPS | CV_TERMCRIT_ITER, 30, 0.001));
-			cv::drawChessboardCorners(grayImg, boardSize, corners, success);
+			cv::cornerSubPix(grayImg, _corners, cv::Size(11, 11), cv::Size(-1, -1), cv::TermCriteria(CV_TERMCRIT_EPS | CV_TERMCRIT_ITER, 30, 0.001));
+			cv::drawChessboardCorners(grayImg, _boardSize, _corners, success);
 		}
 		cv::putText(grayImg, std::to_string(goodCalib) + "/" + std::to_string(CalibNum), cv::Point2i(10, 50), CV_FONT_HERSHEY_DUPLEX, 2, CV_RGB(0, 0, 0), 2);
 		cv::imshow("ColoredCalibrationImage", image);
@@ -43,16 +43,16 @@ bool Artem::ICalib::GetCalibrationData_Chess(int CameraNum)
 	cam.release();
 	return true;
 }
-void Artem::ICalib::ShowUndistorted(int CameraNum)
+void Artem::ICalib::ShowUndistorted(int cameraNum)
 {
-	cv::VideoCapture cam(CameraNum);
+	cv::VideoCapture cam(cameraNum);
 	cv::Mat frame, UndistFrame;
 	cv::namedWindow("frame", CV_WINDOW_AUTOSIZE);
 	cv::namedWindow("UndsistFrame", CV_WINDOW_AUTOSIZE);
 	while (true)
 	{
 		cam >> frame;
-		cv::undistort(frame, UndistFrame, cameraMatrix, distCoeffs);
+		cv::undistort(frame, UndistFrame, _cameraMatrix, _distCoeffs);
 		cv::imshow("frame", frame);
 		cv::imshow("UndsistFrame", UndistFrame);
 
