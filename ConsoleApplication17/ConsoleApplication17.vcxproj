@@ -152,13 +152,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AR.h" />
+    <ClInclude Include="Calibration.h" />
+    <ClInclude Include="ICalib.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AR.cpp" />
     <ClCompile Include="Calibration.cpp" />
     <ClCompile Include="ICalib.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Calibration.h" />
-    <ClInclude Include="ICalib.h" />
+    <ProjectReference Include="..\Aruco1\Aruco1.vcxproj">
+      <Project>{c2062a86-fc9b-42a5-a75f-69c07459b8ac}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
