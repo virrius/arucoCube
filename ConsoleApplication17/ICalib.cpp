@@ -3,39 +3,28 @@
 
 
 
-bool Artem::ICalib::GetCalibrationData_Chess(int cameraNum)
+bool artem::ICalib::getCalibrationDataChess(const int cameraNum, const int calibNum)
 {
-	int CalibNum=15;
-	int goodCalib = 0;
 	
+	int goodCalib = 0;
 	cv::VideoCapture cam(cameraNum);
 	cv::Mat image, grayImg;
-	cv::namedWindow("ColoredCalibrationImage", CV_WINDOW_AUTOSIZE);
-	cv::namedWindow("GrayCalibrationImage", CV_WINDOW_AUTOSIZE);
-
+	std::vector<cv::Point2f> corners;
 	while (goodCalib<CalibNum)
 	{
 		cam >> image;
 		cv::cvtColor(image, grayImg, CV_BGR2GRAY);
-		bool success = cv::findChessboardCorners(image, _boardSize, _corners, cv::CALIB_CB_ADAPTIVE_THRESH | CV_CALIB_CB_FILTER_QUADS);
+		bool success = cv::findChessboardCorners(image, _boardSize, corners, cv::CALIB_CB_ADAPTIVE_THRESH | CV_CALIB_CB_FILTER_QUADS);
 		if (success)
 		{
-			_imgPoints2D.push_back(_corners);
-			_objPoints3D.push_back(_points3D);
+			//check
+			_imgPoints2D.emplace_back(corners);
+			 //_objPoints3D.emplace_back(_points3D);
 			
 			goodCalib++;
-			
-
-			cv::cornerSubPix(grayImg, _corners, cv::Size(11, 11), cv::Size(-1, -1), cv::TermCriteria(CV_TERMCRIT_EPS | CV_TERMCRIT_ITER, 30, 0.001));
-			cv::drawChessboardCorners(grayImg, _boardSize, _corners, success);
 		}
-		cv::putText(grayImg, std::to_string(goodCalib) + "/" + std::to_string(CalibNum), cv::Point2i(10, 50), CV_FONT_HERSHEY_DUPLEX, 2, CV_RGB(0, 0, 0), 2);
-		cv::imshow("ColoredCalibrationImage", image);
-		cv::imshow("GrayCalibrationImage", grayImg);
-		
-		if (cv::waitKey(5) == 27)
+		if (cv::waitKey(1) == 27)
 		{
-		
 			return false;
 		}
 	}
@@ -43,7 +32,7 @@ bool Artem::ICalib::GetCalibrationData_Chess(int cameraNum)
 	cam.release();
 	return true;
 }
-void Artem::ICalib::ShowUndistorted(int cameraNum)
+void artem::ICalib::showUndistorted(const int cameraNum)
 {
 	cv::VideoCapture cam(cameraNum);
 	cv::Mat frame, UndistFrame;
@@ -56,9 +45,17 @@ void Artem::ICalib::ShowUndistorted(int cameraNum)
 		cv::imshow("frame", frame);
 		cv::imshow("UndsistFrame", UndistFrame);
 
-		cv::waitKey(1);
+		if (cv::waitKey(1) == 27)
+		{
+			return;
+		}
 
 	}
-	cv::destroyAllWindows();
-	cam.release();
+	cv::destroyWindow("frame");
+	cv::destroyWindow("UndistFrame");
+}
+
+void artem::ICalib::setBoardSize(const cv::Size2i size)
+{
+	_boardSize = size;
 }

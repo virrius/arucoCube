@@ -2,19 +2,21 @@
 #include"AR.h"
 int main()
 {
-	int cameraNum = 0;
-	Artem::ICalib C;
-	if (!C.GetCalibrationData_Chess(CameraNum))
+	
+	int cameraNum = 1;
+	artem::ICalib C;
+	C.setBoardSize(cv::Size2i(4, 4));
+	if (!C.getCalibrationDataChess(cameraNum, 15))
 		return 1;
-	C.Calibrate();
-	C.ShowUndistorted(CameraNum);
+	std::cout<<C.calibrate();
+	C.showUndistorted(cameraNum);
 	std::cout << C.getCameraMatrix();
 
 	 
-	Artem::AR detect;
+	artem::AR detect;
 	cv::VideoCapture cam(cameraNum);
 	cv::Mat frame;
 
-	detect.GetMarkers(cameraNum);
+	detect.getMarkers(cameraNum);
 	return 0;
 }
