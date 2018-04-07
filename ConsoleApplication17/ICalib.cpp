@@ -10,7 +10,7 @@ bool artem::ICalib::getCalibrationDataChess(const int cameraNum, const int calib
 	cv::VideoCapture cam(cameraNum);
 	cv::Mat image, grayImg;
 	std::vector<cv::Point2f> corners;
-	while (goodCalib<CalibNum)
+	while (goodCalib<calibNum)
 	{
 		cam >> image;
 		cv::cvtColor(image, grayImg, CV_BGR2GRAY);
