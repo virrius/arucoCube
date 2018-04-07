@@ -1,15 +1,16 @@
-#pragma once
+
+#include"aruco.h"
 #include<iostream>
 #include<opencv2\core.hpp>
 #include<opencv2\highgui.hpp>
-#include"aruco.h"
 
-namespace Artem {
+
+namespace artem {
 	class AR
 	{
 	public:
 		AR();
-		void GetMarkers(int CameraNum);
+		void getMarkers(int cameraNum);
 		~AR();
 	};
 
