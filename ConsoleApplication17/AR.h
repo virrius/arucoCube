@@ -5,13 +5,14 @@
 #include<opencv2\highgui.hpp>
 
 
-namespace artem {
+namespace artem 
+{
 	class AR
 	{
 	public:
-		AR();
+		AR() = default;
 		void getMarkers(int cameraNum);
-		~AR();
+		
 	};
 
 }

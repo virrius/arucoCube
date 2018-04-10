@@ -17,10 +17,7 @@ bool artem::ICalib::getCalibrationDataChess(const int cameraNum, const int calib
 		bool success = cv::findChessboardCorners(image, _boardSize, corners, cv::CALIB_CB_ADAPTIVE_THRESH | CV_CALIB_CB_FILTER_QUADS);
 		if (success)
 		{
-			//check
 			_imgPoints2D.emplace_back(corners);
-			 //_objPoints3D.emplace_back(_points3D);
-			
 			goodCalib++;
 		}
 		if (cv::waitKey(1) == 27)

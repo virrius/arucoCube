@@ -2,14 +2,10 @@
 
 
 
-artem::AR::AR()
-{
-}
-
-void artem::AR::getMarkers(int CameraNum)
+void artem::AR::getMarkers(int cameraNum)
 {
 	cv::Mat Frame;
-	cv::VideoCapture cam(CameraNum);
+	cv::VideoCapture cam(cameraNum);
 	cv::Ptr<cv::aruco::Dictionary> dict = cv::aruco::getPredefinedDictionary(cv::aruco::DICT_6X6_250);
 	for (int i = 0; i < 6; ++i)
 	{
@@ -44,4 +40,4 @@ void artem::AR::getMarkers(int CameraNum)
 }
 
 
-artem::AR::~AR() = default;
+

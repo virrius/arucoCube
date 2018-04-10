@@ -31,14 +31,16 @@ namespace artem
 		cv::Mat _cameraMatrix;
 		/// Camera distortion coefficients
 		cv::Mat _distCoeffs;
+
+		/**
+		* \brief fillup vector of coordinates
+		*/
+		void setupObjPoints3D(std::vector<std::vector<cv::Point3f>> &objPoints3D);
 	public:
 		
 		Calibration() = default;
 		virtual ~Calibration() = default;
-		/**
-		* \brief fillup vector of coordinates
-		*/
-		void setupObjPoints3D(std::vector<std::vector<cv::Point3f>> &objPoints3D, const int size);
+
 			/**
 			* \brief Calibrating camera with dataset
 			* \return error
@@ -49,6 +51,11 @@ namespace artem
 		*
 		*/
 		cv::Mat getCameraMatrix() const;
+		/**
+		* \brief  return camera distortion coefficients
+		*
+		*/
+		cv::Mat getDistCoeffs() const;
 	};
 
 }
