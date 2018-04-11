@@ -1,5 +1,5 @@
 #include"Calibration.h"
-#
+
 void artem::Calibration::setupObjPoints3D(std::vector<std::vector<cv::Point3f>> &objPoints3D)
 {
 	std::vector<cv::Point3f> points3D;
@@ -10,7 +10,7 @@ void artem::Calibration::setupObjPoints3D(std::vector<std::vector<cv::Point3f>> 
 		}
 	for (int i = 0; i < _imgPoints2D.size; ++i)
 	{
-		objPoints3D.emplace_back(points3D);
+		objPoints3D.push_back(points3D);
 	}
 
 }
