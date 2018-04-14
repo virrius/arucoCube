@@ -8,7 +8,7 @@ void artem::Calibration::setupObjPoints3D(std::vector<std::vector<cv::Point3f>> 
 		{
 			points3D.emplace_back(cv::Point3f(i, j, 0));
 		}
-	for (int i = 0; i < _imgPoints2D.size; ++i)
+	for (int i = 0; i < _imgPoints2D.size(); ++i)
 	{
 		objPoints3D.push_back(points3D);
 	}
@@ -34,3 +34,22 @@ cv::Mat artem::Calibration::getDistCoeffs() const
 {
 	return _distCoeffs.clone();
 }
+
+void artem::Calibration::saveCalibrationParameters(const std::string fileToSave)
+{
+	cv::FileStorage calibFile(fileToSave, cv::FileStorage::WRITE);
+	calibFile << "Camera matrix" << _cameraMatrix;
+	calibFile << "Distortion coefficients" << _distCoeffs;
+	calibFile.release();
+
+}
+
+void artem::Calibration::loadCalibrationParameters(const std::string fileToLoad)
+{
+	cv::FileStorage calibFile(fileToLoad, cv::FileStorage::READ);
+	calibFile["Camera matrix"] >> _cameraMatrix;
+	calibFile["Distortion coefficients"] >> _distCoeffs;
+	calibFile.release();
+
+}
+

@@ -1,9 +1,9 @@
 #include "AR.h"
 
 
-
 void artem::AR::getMarkers(int cameraNum)
 {
+	
 	cv::Mat Frame;
 	cv::VideoCapture cam(cameraNum);
 	cv::Ptr<cv::aruco::Dictionary> dict = cv::aruco::getPredefinedDictionary(cv::aruco::DICT_6X6_250);
@@ -37,6 +37,30 @@ void artem::AR::getMarkers(int cameraNum)
 	cv::namedWindow("!", CV_WINDOW_AUTOSIZE);
 	cv::imshow("!",markerImage);
 	cv::waitKey();
+}
+
+void artem::AR::generateAndSaveDict(const std::string fileToSave )
+{
+	cv::aruco::Dictionary ownDict = cv::aruco::generateCustomDictionary(6, 8);
+	cv::FileStorage dictFile(fileToSave, cv::FileStorage::WRITE);
+	dictFile << "MarkerSize" << ownDict.markerSize;
+	dictFile << "MaxCorrectionBits" << ownDict.maxCorrectionBits;
+	dictFile << "BytesList" << ownDict.bytesList;
+	dictFile.release();
+}
+cv::aruco::Dictionary artem::AR::loadDictfromFile(const std::string filename)
+{
+	cv::aruco::Dictionary ownDict;
+	cv::FileStorage dictFile(filename, cv::FileStorage::READ);
+	cv::Mat	bytesList;
+	dictFile["BytesList"] >> bytesList;
+	int markerSize;
+	dictFile["MarkerSize"] >> markerSize;
+	int maxCorrectionBits;
+	dictFile["MaxCorrectionBits"] >> maxCorrectionBits;
+	dictFile.release();
+	return cv::aruco::Dictionary(bytesList,markerSize,maxCorrectionBits);
+
 }
 
 

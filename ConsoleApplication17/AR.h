@@ -1,3 +1,6 @@
+#ifndef  AR_H
+#define AR_H
+
 
 #include"aruco.h"
 #include<iostream>
@@ -9,10 +12,15 @@ namespace artem
 {
 	class AR
 	{
+
 	public:
 		AR() = default;
 		void getMarkers(int cameraNum);
+		void generateAndSaveDict(const std::string fileToSave= "ownDict.yml");
+		cv::aruco::Dictionary loadDictfromFile(const std::string filename = "ownDict.yml");
 		
 	};
 
 }
+
+#endif // ! AR_H
