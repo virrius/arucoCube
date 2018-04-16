@@ -11,10 +11,9 @@ int main()
 	std::cout<<C.calibrate();*/
 	C.loadCalibrationParameters();
 	artem::IArucoMarkers detect;
-	detect.generateAndSaveDict();
-	detect.loadDictfromFile();
+	detect.generateDict(6,8);
 	detect.showDictMarkers();
 	std::vector<cv::Vec3d> rvecs, tvecs;
-	detect.getMarkers(C.getCameraMatrix(), C.getDistCoeffs(), cameraNum,rvecs,tvecs);
+	detect.getMarkersCoordinates(C.getCameraMatrix(), C.getDistCoeffs(), cameraNum, rvecs, tvecs, true);
 	return 0;
 }
