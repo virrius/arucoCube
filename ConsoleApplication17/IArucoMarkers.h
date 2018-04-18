@@ -21,7 +21,7 @@ namespace artem
 		* \brief Show markers from dictionary 
 		*
 		*/
-		void showDictMarkers();
+		void showDictMarkers(const int &sidePixels = 200, const int &border = 1);
 		/**
 		* \brief finding markers and receiving their coordinates
 		* \param[in] cameraMatrix Intristic camera parameters
@@ -30,8 +30,9 @@ namespace artem
 		* \param[out] rvecs rotation vectors of markers
 		* \param[out] tvecs translation vectors of markers
 		* \param[in] drawMarkers draw borders and axis
+		* \param[in] markerlength the length of the markers side, in meters(as normally)
 		*/
-		void getMarkersCoordinates(const cv::Mat cameraMatrix, const  cv::Mat distCoeffs, const int cameraNum, std::vector<cv::Vec3d> &rvecs, std::vector<cv::Vec3d> &tvecs,const bool drawMarkers=0);
+		void getMarkersCoordinates(const cv::Mat cameraMatrix, const  cv::Mat distCoeffs, const int cameraNum, std::vector<cv::Vec3d> &rvecs, std::vector<cv::Vec3d> &tvecs, const double &markerLength, const bool drawMarkers=0);
 		
 		virtual ~IArucoMarkers() = default;
 
