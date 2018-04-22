@@ -56,6 +56,16 @@ namespace artem
 		*
 		*/
 		cv::Mat getDistCoeffs() const;
+		/**
+		* \brief  save camera and distcoeffs matrixes to file
+		*
+		*/
+		void saveCalibrationParameters(const std::string fileToSave= "Calibration.yml");
+		/**
+		* \brief  load camera and distcoeffs matrixes from  file
+		*
+		*/
+		void loadCalibrationParameters(const std::string fileToLoad = "Calibration.yml");
 	};
 
 }

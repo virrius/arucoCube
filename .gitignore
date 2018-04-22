@@ -1,3 +1,19 @@
 
 ConsoleApplication17.VC.db
 .vs/ConsoleApplication17/v14/.suo
+*.vcxproj
+*.filters
+*.obj
+*.idb
+*.log
+*.pdb
+*.lastbuildstate
+*.tlog
+*.sln
+*.db
+*.ilk
+*.exe
+*.enc
+*.cache
+*.filters
+*.vcxproj
