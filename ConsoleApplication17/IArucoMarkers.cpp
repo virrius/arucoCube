@@ -2,7 +2,7 @@
 
 
 
-void artem::IArucoMarkers::showDictMarkers(const int &sidePixels, const int &border)
+void artem::IArucoMarkers::showDictMarkers(const int sidePixels, const int border)
 {
 	cv::Mat marker;
 	for (int i = 0; i < _MarkersDict.get()->bytesList.rows; ++i)
@@ -14,7 +14,7 @@ void artem::IArucoMarkers::showDictMarkers(const int &sidePixels, const int &bor
 	cv::destroyAllWindows();
 }
 
-void artem::IArucoMarkers::getMarkersCoordinates(const cv::Mat cameraMatrix, const  cv::Mat distCoeffs, const int cameraNum, std::vector<cv::Vec3d> &rvecs, std::vector<cv::Vec3d> &tvecs, const double &markerLength, const bool drawMarkers)
+void artem::IArucoMarkers::getMarkersCoordinates(const cv::Mat cameraMatrix, const  cv::Mat distCoeffs, const int cameraNum, std::vector<cv::Vec3d> &rvecs, std::vector<cv::Vec3d> &tvecs, const double markerLength, const bool drawMarkers)
 {
 	cv::Mat frame;
 	cv::VideoCapture cam(cameraNum);

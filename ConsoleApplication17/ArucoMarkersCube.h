@@ -9,7 +9,7 @@
 #include"aruco.h"
 #include<opencv2\core.hpp>
 #include<opencv2\highgui.hpp>
-#include <Windows.h>
+
 
 namespace artem 
 {
@@ -33,7 +33,7 @@ namespace artem
 		* \param[out] tvecs translation vectors of markers
 		* \param[in] drawMarkers draw borders and axis
 		*/
-		void getMarkersPoseEstimation(cv::Mat &frame, std::vector<std::vector<cv::Point2f>> markerCorners, std::vector<int> &markerIds, const double &markerLength, const cv::Mat cameraMatrix, const cv::Mat distcoeffs, std::vector<cv::Vec3d> &rvecs,
+		void getMarkersPoseEstimation(cv::Mat &frame, std::vector<std::vector<cv::Point2f>> markerCorners, std::vector<int> &markerIds, const double markerLength, const cv::Mat cameraMatrix, const cv::Mat distcoeffs, std::vector<cv::Vec3d> &rvecs,
 			std::vector<cv::Vec3d> &tvecs,const bool drawMarkers=false);
 	public:
 		ArucoMarkersCube() = default;
@@ -45,7 +45,7 @@ namespace artem
 		* \param[in] sidePixels marker resolution in pixels
 		* \param[in] border  width of marker border
 		*/
-		void generateDict(const int &numMarkers, const int &markersSize,  const cv::Ptr<cv::aruco::Dictionary> &baseDict, const int &sidePixels=200, const int &border=1 );
+		void generateDict(const int numMarkers, const int markersSize,  const cv::Ptr<cv::aruco::Dictionary> &baseDict, const int sidePixels=200, const int border=1 );
 		/**
 		* \brief  generate custom dictionary 
 		* \param[in] numMarkers number of elements in dictionary
@@ -53,14 +53,14 @@ namespace artem
 		* \param[in] sidePixels marker resolution in pixels
 		* \param[in] border  width of marker border
 		*/
-		void generateDict(const int &numMarkers, const int &markersSize, const int &sidePixels=200, const int &border=1);
+		void generateDict(const int numMarkers, const int markersSize, const int sidePixels=200, const int border=1);
 		/**
 		* \brief  save markers from dictionary in folder Markers
 		* \param[in] sidePixels marker resolution in pixels
 		* \param[in] border  width of marker border
 		* \param[in] baseDict sourcedictionary
 		*/
-		void saveMarkersFromDict(const int &sidePixels, const int &border, const cv::Ptr<cv::aruco::Dictionary> &baseDict);
+		void saveMarkersFromDict(const int sidePixels, const int border, const cv::Ptr<cv::aruco::Dictionary> &baseDict);
 
 		virtual ~ArucoMarkersCube() = default;
 	};
