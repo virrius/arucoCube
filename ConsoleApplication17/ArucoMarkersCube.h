@@ -21,7 +21,7 @@ namespace artem
 	protected:
 		/// dictionary with markers desribing the cube
 		cv::Ptr<cv::aruco::Dictionary> _MarkersDict;
-		double _cubeMarkersLength=0.05;
+		double _cubeMarkersLength=0.053;
 		public:
 		/**
 		* \brief  search markers and estimate their position

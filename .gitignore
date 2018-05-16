@@ -9,6 +9,7 @@ ConsoleApplication17.VC.db
 *.pdb
 *.lastbuildstate
 *.tlog
+*.db
 *.sln
 *.db
 *.ilk
@@ -17,3 +18,8 @@ ConsoleApplication17.VC.db
 *.cache
 *.filters
 *.vcxproj
+*.vcxproj
+*.filters
+*.ipch
+*.db-wal
+*.db-shm
