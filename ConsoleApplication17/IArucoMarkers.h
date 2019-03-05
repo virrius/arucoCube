@@ -21,7 +21,7 @@ namespace artem
 		* \brief Show markers from dictionary 
 		*
 		*/
-		void showDictMarkers(const int sidePixels = 200, const int border = 1);
+		void showDictMarkers(const int MarkerSize, const int sidePixels = 200, const int border = 1);
 		/**
 		* \brief finding markers and receiving their coordinates
 		* \param[in] cameraMatrix Intristic camera parameters

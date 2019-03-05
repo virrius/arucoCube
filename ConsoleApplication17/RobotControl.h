@@ -8,6 +8,7 @@
 #include<opencv2\core.hpp>	
 #include<opencv2\highgui.hpp>
 #include<opencv2\imgproc.hpp>
+#include"Fanuc.h"
 #include"IArucoMarkers.h"
 #include"ICalib.h"
 #include<vector>
@@ -44,6 +45,8 @@ namespace artem {
 		std::vector<int> _MarkerIds;
 		///rotation coeffitient to bring the current cube face coordinate system to the main
 		cv::Mat _RotCoeff;
+
+		FanucM20iA fanuc;
 		
 	public:
 		

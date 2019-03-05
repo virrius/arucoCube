@@ -7,10 +7,8 @@ cv::Vec3d rotationMatrixToEulerAngles(cv::Mat &R)
 
 	float sy = sqrt(R.at<double>(0, 0) * R.at<double>(0, 0) + R.at<double>(1, 0) * R.at<double>(1, 0));
 
-	bool singular = sy < 1e-6; // If
-
 	float x, y, z;
-	if (!singular)
+	if (sy > 1e-6)
 	{
 		x = atan2(R.at<double>(2, 1), R.at<double>(2, 2));
 		y = atan2(-R.at<double>(2, 0), sy);
@@ -67,6 +65,10 @@ void artem::RobotControl::prepareAndStartTracking(const int cameraNum,  const in
 	cv::VideoCapture cam(cameraNum);
 	cv::namedWindow("Camera", CV_WINDOW_AUTOSIZE);
 
+	
+	//fanuc.startWorking();
+	//fanuc.setWorldFrame();
+
 	getRobotCoordinates();
 	_Calib.loadCalibrationParameters();
 	_Cube.generateDict(6, cubeMarkersSize);
@@ -74,7 +76,7 @@ void artem::RobotControl::prepareAndStartTracking(const int cameraNum,  const in
 	std::vector<cv::Vec3d> rvecs, tvecs;
 	do {
 		cam >> frame;
-		_Cube.getMarkersPoseEstimation(frame, _Cube.getMarkerLength(), _Calib.getCameraMatrix(), _Calib.getDistCoeffs(), _MarkerIds, rvecs, tvecs, true);
+		_Cube.getMarkersPoseEstimation(frame, _Cube.getMarkerLength(), _Calib.getCameraMatrix(), _Calib.getDistCoeffs(), _MarkerIds, rvecs, tvecs,false);
 		cv::imshow("Camera", frame);
 		cv::waitKey(1);		
 	} while (_MarkerIds.size()==0);
@@ -113,7 +115,7 @@ void artem::RobotControl::mainSurfacelost()
 				1, 0, 0,
 				0, 1, 0,
 				0, 0, 1);
-			std::cout << "Top" << std::endl;
+			std::cout << "Top\n";
 			break;
 		}
 		case up:
@@ -124,7 +126,7 @@ void artem::RobotControl::mainSurfacelost()
 				0, sin(CV_PI / 2), cos(CV_PI / 2));
 
 			_RotCoeff = coeff1;//coeff1.t();
-			std::cout << "up" << std::endl;
+			std::cout << "up\n";
 			break;
 
 		}
@@ -137,7 +139,7 @@ void artem::RobotControl::mainSurfacelost()
 				);
 	
 			_RotCoeff = coeff1;// coeff1.t();
-			std::cout << "Left"<<std::endl;
+			std::cout << "Left\n";
 			break;
 			
 		}
@@ -151,7 +153,7 @@ void artem::RobotControl::mainSurfacelost()
 
 			);
 			_RotCoeff = coeff1;// coeff1.t();
-			std::cout << "Right" << std::endl;
+			std::cout << "Right\n";
 			break;
 		}
 		case down:
@@ -162,7 +164,7 @@ void artem::RobotControl::mainSurfacelost()
 				0, -sin(CV_PI / 2), cos(CV_PI / 2));
 
 			_RotCoeff = coeff1;//coeff1.t();
-			std::cout << "down" << std::endl;
+			std::cout << "down\n";
 			break;
 		}
 		case back:
@@ -172,7 +174,7 @@ void artem::RobotControl::mainSurfacelost()
 				0, 1, 0,				
 				sin(CV_PI), 0, cos(CV_PI));
 			_RotCoeff = coeff1;// coeff1.t();
-			std::cout << "Back" << std::endl;
+			std::cout << "Back\n";
 			break;
 			
 		}
@@ -185,7 +187,7 @@ void artem::RobotControl::mainSurfacelost()
 void artem::RobotControl::CubeTracking(cv::Mat & frame,  std::vector<cv::Vec3d> rvecs,  std::vector<cv::Vec3d>& tvecs)
 {
 	
-	_Cube.getMarkersPoseEstimation(frame, _Cube.getMarkerLength(), _Calib.getCameraMatrix(), _Calib.getDistCoeffs(), _MarkerIds, rvecs, tvecs, true);
+	_Cube.getMarkersPoseEstimation(frame, _Cube.getMarkerLength(), _Calib.getCameraMatrix(), _Calib.getDistCoeffs(), _MarkerIds, rvecs, tvecs,false);
 	updateRobotCoordinates(frame, _MarkerIds, rvecs, tvecs);
 	//cv::waitKey(200); //Debug!
 	for (int i = 0; i < _MarkerIds.size(); ++i)
@@ -200,8 +202,8 @@ void artem::RobotControl::CubeTracking(cv::Mat & frame,  std::vector<cv::Vec3d> 
 void artem::RobotControl::getRobotCoordinates()//todo
 {
 	{
-		_RobotTranslationCoordinates = cv::Vec3d(0, 0, 0); 
-		_RobotRotationCoordinates = cv::Vec3d(0, 0, 0);
+		_RobotTranslationCoordinates = cv::Vec3d(985, 0, 940); 
+		_RobotRotationCoordinates = cv::Vec3d(-180, 0, 0);
 
 	};
 }
@@ -222,27 +224,27 @@ void artem::RobotControl::updateRobotCoordinates(cv::Mat &frame, const std::vect
 			rvecMat =  rvecMat*_RotCoeff;
 			cv::Rodrigues(rvecMat,rvecUpd);					
 			
-			_RobotTranslationCoordinates += (tvecs[i] - _CubeTranslationCoordinates[markerids[i]]); 
+			_RobotTranslationCoordinates += (tvecs[i]*1000 - _CubeTranslationCoordinates[markerids[i]]*1000); 
 			_RobotRotationCoordinates += (rvecUpd-_RobotRotationCoordinates);
 			surfaceFinded = true;		
 			
 			//-------------------debug main Coordinate system-----------------------------------------------
-			cv::namedWindow("CS", CV_WINDOW_AUTOSIZE);
-			cv::Mat CoordinateFrame=cv::Mat::zeros(500,500,CV_32F);
-			std::vector< cv::Point3f > axisPoints;
-			axisPoints.push_back(cv::Point3f(0, 0, 0));
-			axisPoints.push_back(cv::Point3f(0.02, 0, 0));
-			axisPoints.push_back(cv::Point3f(0, 0.06, 0));
-			axisPoints.push_back(cv::Point3f(0, 0, 0.1));
-			std::vector< cv::Point2f > imagePoints;
-			projectPoints(axisPoints, _RobotRotationCoordinates,cv::Vec3d(0.0,0.006,0.2), _Calib.getCameraMatrix(), _Calib.getDistCoeffs(), imagePoints);
+			//cv::namedWindow("CS", CV_WINDOW_AUTOSIZE);
+			//cv::Mat CoordinateFrame=cv::Mat::zeros(500,500,CV_32F);
+			//std::vector< cv::Point3f > axisPoints;
+			//axisPoints.push_back(cv::Point3f(0, 0, 0));
+			//axisPoints.push_back(cv::Point3f(0.02, 0, 0));
+			//axisPoints.push_back(cv::Point3f(0, 0.06, 0));
+			//axisPoints.push_back(cv::Point3f(0, 0, 0.1));
+			//std::vector< cv::Point2f > imagePoints;
+			//projectPoints(axisPoints, _RobotRotationCoordinates,cv::Vec3d(0.0,0.006,0.2), _Calib.getCameraMatrix(), _Calib.getDistCoeffs(), imagePoints);
 
-			// draw axis lines
-			line(CoordinateFrame, imagePoints[0], imagePoints[1], cv::Scalar(255, 0, 0), 3);
-			line(CoordinateFrame, imagePoints[0], imagePoints[2], cv::Scalar(255, 0, 0), 3);
-			line(CoordinateFrame, imagePoints[0], imagePoints[3], cv::Scalar(255, 0, 0), 3);
-			cv::imshow("CS", CoordinateFrame);
-			cv::waitKey(1);
+			//// draw axis lines
+			//line(CoordinateFrame, imagePoints[0], imagePoints[1], cv::Scalar(255, 0, 0), 3);
+			//line(CoordinateFrame, imagePoints[0], imagePoints[2], cv::Scalar(255, 0, 0), 3);
+			//line(CoordinateFrame, imagePoints[0], imagePoints[3], cv::Scalar(255, 0, 0), 3);
+			//cv::imshow("CS", CoordinateFrame);
+			//cv::waitKey(1);
 			break;
 		}
 		
@@ -252,11 +254,19 @@ void artem::RobotControl::updateRobotCoordinates(cv::Mat &frame, const std::vect
 		mainSurfacelost();
 	}
 
-
-	//Debug
 	cv::Mat tmp;
 	cv::Rodrigues(_RobotRotationCoordinates, tmp);
 	cv::Vec3f euler = rotationMatrixToEulerAngles(tmp);
+	
+	std::cout << "X: "<<_RobotTranslationCoordinates[0] << " Y: " << _RobotTranslationCoordinates[1]<<" Z: "<< _RobotTranslationCoordinates[2];
+	fanuc.goToCoordinates(_RobotTranslationCoordinates[0], _RobotTranslationCoordinates[1], _RobotTranslationCoordinates[2],
+		euler[0] * 180.0 / CV_PI + 180, euler[1] * 180.0 / CV_PI, euler[2] * 180.0 / CV_PI);
+	fanuc.getJointAngles();
+
+	//Debug
+	/*cv::Mat tmp;
+	cv::Rodrigues(_RobotRotationCoordinates, tmp);
+	cv::Vec3f euler = rotationMatrixToEulerAngles(tmp);*/
 	cv::putText(frame, "Rot: " + std::to_string(euler[0] * 180.0 / CV_PI+180) + " " + std::to_string(euler[1] * 180.0 / CV_PI) + " " + std::to_string(euler[2] * 180.0 / CV_PI), cv::Point2i(10, 20),cv::FONT_HERSHEY_TRIPLEX, 0.4, (0, 0, 0));
 	cv::putText(frame, "Tr: " + std::to_string(_RobotTranslationCoordinates[0]) + " " + std::to_string(_RobotTranslationCoordinates[1]) + " " + std::to_string(_RobotTranslationCoordinates[2]), cv::Point2i(10, 50), cv::FONT_HERSHEY_TRIPLEX, 0.4, (0, 0, 0));
 	cv::putText(frame, "Norm: " + std::to_string(sqrt(_RobotTranslationCoordinates[0] * _RobotTranslationCoordinates[0] + _RobotTranslationCoordinates[1] * _RobotTranslationCoordinates[1] + _RobotTranslationCoordinates[2] * _RobotTranslationCoordinates[2])), cv::Point2i(10, 80), cv::FONT_HERSHEY_TRIPLEX, 0.4, (0, 0, 0));

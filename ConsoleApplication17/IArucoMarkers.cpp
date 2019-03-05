@@ -2,8 +2,9 @@
 
 
 
-void artem::IArucoMarkers::showDictMarkers(const int sidePixels, const int border)
+void artem::IArucoMarkers::showDictMarkers(const int MarkerSize, const int sidePixels, const int border)
 {
+	generateDict(6, MarkerSize);
 	cv::Mat marker;
 	for (int i = 0; i < _MarkersDict.get()->bytesList.rows; ++i)
 	{
