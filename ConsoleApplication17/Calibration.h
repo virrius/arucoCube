@@ -23,6 +23,8 @@ namespace artem
 	class Calibration {
 
 	protected:
+		///pattern form
+		enum  pattern;
 		/// Size of calibration pattern;
 		cv::Size _boardSize;		
 		/// Vector of corners calibration patterns 
@@ -35,9 +37,16 @@ namespace artem
 		/**
 		* \brief fillup vector of coordinates
 		*/
-		void setupObjPoints3D(std::vector<std::vector<cv::Point3f>> &objPoints3D);
+		void setupObjPoints3D(std::vector<std::vector<cv::Point3f>> &objPoints3D, pattern);
+
+		float _circleGridSquareSize;
 	public:
-		
+		enum  pattern
+		{
+			circleGrid,
+			assymetricCircleGrid,
+			chessBoard
+		};
 		Calibration() = default;
 		virtual ~Calibration() = default;
 
@@ -45,7 +54,7 @@ namespace artem
 			* \brief Calibrating camera with dataset
 			* \return error
 			*/
-			double calibrate();
+			double calibrate(pattern patternMode);
 		/**
 		* \brief return Intristic parameters.
 		*
@@ -56,16 +65,7 @@ namespace artem
 		*
 		*/
 		cv::Mat getDistCoeffs() const;
-		/**
-		* \brief  save camera and distcoeffs matrixes to file
-		*
-		*/
-		void saveCalibrationParameters(const std::string fileToSave= "Calibration.yml");
-		/**
-		* \brief  load camera and distcoeffs matrixes from  file
-		*
-		*/
-		void loadCalibrationParameters(const std::string fileToLoad = "Calibration.yml");
+		
 	};
 
 }

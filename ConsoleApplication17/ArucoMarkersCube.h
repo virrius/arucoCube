@@ -21,6 +21,8 @@ namespace artem
 	protected:
 		/// dictionary with markers desribing the cube
 		cv::Ptr<cv::aruco::Dictionary> _MarkersDict;
+		double _cubeMarkersLength=0.053;
+		public:
 		/**
 		* \brief  search markers and estimate their position
 		* \param[in] frame frame to finding markers
@@ -33,9 +35,13 @@ namespace artem
 		* \param[out] tvecs translation vectors of markers
 		* \param[in] drawMarkers draw borders and axis
 		*/
-		void getMarkersPoseEstimation(cv::Mat &frame, std::vector<std::vector<cv::Point2f>> markerCorners, std::vector<int> &markerIds, const double markerLength, const cv::Mat cameraMatrix, const cv::Mat distcoeffs, std::vector<cv::Vec3d> &rvecs,
+		void getMarkersPoseEstimation(cv::Mat &frame, 
+			//std::vector<std::vector<cv::Point2f>> markerCorners, 
+			 
+			const double markerLength, 
+			const cv::Mat cameraMatrix, const cv::Mat distcoeffs, std::vector<int> &markerIds, std::vector<cv::Vec3d> &rvecs,
 			std::vector<cv::Vec3d> &tvecs,const bool drawMarkers=false);
-	public:
+	
 		ArucoMarkersCube() = default;
 		/**
 		* \brief  generate custom dictionary based on predefined
@@ -63,6 +69,8 @@ namespace artem
 		void saveMarkersFromDict(const int sidePixels, const int border, const cv::Ptr<cv::aruco::Dictionary> &baseDict);
 
 		virtual ~ArucoMarkersCube() = default;
+		double getMarkerLength()const;
+		void setMarkerLength(const double L);
 	};
 
 }

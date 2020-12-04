@@ -2,19 +2,23 @@
 #include <experimental/filesystem>
 
 void artem::ArucoMarkersCube::getMarkersPoseEstimation(cv::Mat &frame, 
-	std::vector<std::vector<cv::Point2f>> markerCorners,
-	std::vector<int> &markerIds,
+	//std::vector<std::vector<cv::Point2f>> markerCorners,
+	//std::vector<int> &markerIds,
 	const double markerLength,
 	const cv::Mat cameraMatrix, 
 	const cv::Mat distCoeffs,
+	std::vector<int> &markerIds,
 	std::vector<cv::Vec3d> &rvecs,
 	std::vector<cv::Vec3d> &tvecs,
 	const bool drawMarkers)
-{                    
+{     
+	;
+	std::vector<std::vector<cv::Point2f>> markerCorners;
+
 	cv::aruco::detectMarkers(frame, _MarkersDict, markerCorners, markerIds);
 	if (markerIds.size() > 0)
 	{
-		
+	
 		cv::aruco::estimatePoseSingleMarkers(markerCorners, markerLength, cameraMatrix, distCoeffs, rvecs, tvecs);
 
 		if (drawMarkers)
@@ -50,6 +54,16 @@ void artem::ArucoMarkersCube::saveMarkersFromDict(const int sidePixels, const in
 		cv::imwrite("Markers/" + std::to_string(i) + ".png", marker);
 	}
 }
+
+double artem::ArucoMarkersCube::getMarkerLength() const
+{
+	return _cubeMarkersLength;
+}
+void artem::ArucoMarkersCube::setMarkerLength(const double L)
+{
+	this->_cubeMarkersLength = L;
+}
+
 
 
 

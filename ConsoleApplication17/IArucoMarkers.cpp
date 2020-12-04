@@ -2,8 +2,9 @@
 
 
 
-void artem::IArucoMarkers::showDictMarkers(const int sidePixels, const int border)
+void artem::IArucoMarkers::showDictMarkers(const int MarkerSize, const int sidePixels, const int border)
 {
+	generateDict(6, MarkerSize);
 	cv::Mat marker;
 	for (int i = 0; i < _MarkersDict.get()->bytesList.rows; ++i)
 	{
@@ -11,7 +12,7 @@ void artem::IArucoMarkers::showDictMarkers(const int sidePixels, const int borde
 		cv::imshow(std::to_string(i), marker);
 	}
 	cv::waitKey();
-	cv::destroyAllWindows();
+	//cv::destroyAllWindows();
 }
 
 void artem::IArucoMarkers::getMarkersCoordinates(const cv::Mat cameraMatrix, const  cv::Mat distCoeffs, const int cameraNum, std::vector<cv::Vec3d> &rvecs, std::vector<cv::Vec3d> &tvecs, const double markerLength, const bool drawMarkers)
@@ -20,8 +21,7 @@ void artem::IArucoMarkers::getMarkersCoordinates(const cv::Mat cameraMatrix, con
 	cv::VideoCapture cam(cameraNum);
 
 	std::vector<int> markerIds;
-	std::vector<std::vector<cv::Point2f>> markerCorners;
-	cv::Ptr<cv::aruco::DetectorParameters> parameters;
+	//cv::Ptr<cv::aruco::DetectorParameters> parameters;
 
 
 	cv::namedWindow("video", CV_WINDOW_AUTOSIZE);
@@ -29,7 +29,7 @@ void artem::IArucoMarkers::getMarkersCoordinates(const cv::Mat cameraMatrix, con
 	{
 		cam >> frame;
 
-		getMarkersPoseEstimation(frame, markerCorners, markerIds,markerLength, cameraMatrix, distCoeffs, rvecs, tvecs, drawMarkers);
+		getMarkersPoseEstimation(frame,markerLength, cameraMatrix, distCoeffs, markerIds, rvecs, tvecs, drawMarkers);
 
 		cv::imshow("video", frame);
 		if (cv::waitKey(1) == 27)
